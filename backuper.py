@@ -1,3 +1,12 @@
+#my first primitive folder backup utility,
+#written and compiled on windows, python 2.7
+#runs from windows powershell, will back up basically any folder (or folder tree) to any destination
+#for my set up: rootOfEvil is the user folder, i was concerned with backing up music,pictures, documents folders from that folder
+#wil prompt the user for the directory to which to backup, create a folder BACKUP in that directory and create a folder
+# with a datestamp for any directory that is copied
+
+#also presents a progress line when copying files
+
 import sys, os
 from datetime import datetime
 from os.path import join, splitext, split, exists
@@ -45,11 +54,11 @@ def main():
 		elif (myInput=="5"):
 			control="exit"
 
-def go(src,d,what):
+def go(src,destinationRoot,what):
 	count=0
 	total=0
 	print src
-	dest=d+what.upper()+"_BACKUP"+datetime.now().strftime("%Y-%m-%d")+"\\"
+	dest=destinationRoot+what.upper()+"_BACKUP"+datetime.now().strftime("%Y-%m-%d")+"\\"
 	for path, dirname, fnames in os.walk(src):
 		total += len(fnames)
 	print "Total: %d "%total+what.title()+" Files"+"\n--------------------------------"
@@ -75,7 +84,11 @@ def copy_directory(source, target,total):
 					count+=1
 					printIteration(count,total)
 				except Exception as e:
+<<<<<<< HEAD:ver1.py
 					print "error" + str(e)
+=======
+					print "\nError - Probably encoding issue, Exception:" + str(e)
+>>>>>>> fdf45eb1053371afbcc664e319f923bdfc484ee0:backuper.py
 					error+=1
 					count+=1
 					printIteration(count,total)
