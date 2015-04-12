@@ -1,3 +1,12 @@
+#my first primitive folder backup utility,
+#written and compiled on windows, python 2.7
+#runs from windows powershell, will back up basically any folder (or folder tree) to any destination
+#for my set up: rootOfEvil is the user folder, i was concerned with backing up music,pictures, documents folders from that folder
+#wil prompt the user for the directory to which to backup, create a folder BACKUP in that directory and create a folder
+# with a datestamp for any directory that is copied
+
+#also presents a progress line when copying files
+
 import sys, os
 from datetime import datetime
 from os.path import join, splitext, split, exists
