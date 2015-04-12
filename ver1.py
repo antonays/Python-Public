@@ -3,6 +3,7 @@ from datetime import datetime
 from os.path import join, splitext, split, exists
 from shutil import copyfile
 from filecmp import cmp
+import unicodedata
 
 rootOfEvil="c:\users\Anton\\"
 
@@ -51,9 +52,9 @@ def go(src,d,what):
 	dest=d+what.upper()+"_BACKUP"+datetime.now().strftime("%Y-%m-%d")+"\\"
 	for path, dirname, fnames in os.walk(src):
 		total += len(fnames)
-	print "Total: %d "%total+what.title()+" Files"
+	print "Total: %d "%total+what.title()+" Files"+"\n--------------------------------"
 	count = copy_directory(src,dest,total)
-	print "Done"+ what.upper()+", copied %d out of %d"%(count,total)
+	print "--------------------------------\n"+"Done "+ what.upper()+", copied %d out of %d"%(count,total)+"\n--------------------------------"
 	
 def copy_directory(source, target,total):
 	count=0
@@ -72,16 +73,24 @@ def copy_directory(source, target,total):
 				try:
 					copyfile(from_, to_)
 					count+=1
-				except:
-					print "error"
+					printIteration(count,total)
+				except Exception as e:
+					print "error" + str(e)
 					error+=1
+					count+=1
+					printIteration(count,total)
 			else:
 				skipped+=1
-			sys.stdout.write("\r%d Out of: %d"%(count,total))
-			sys.stdout.flush()
+				count+=1
+				printIteration(count,total)
+			
 	sys.stdout.write("\n")
 	print "Copied: %d\nSkipped: %d\nErrors:%d\nOut Of Total %d"%(count,skipped,error,total)
 	return count
 
+def printIteration(count,total):
+	sys.stdout.write("\r%d Out of: %d"%(count,total))
+	sys.stdout.flush()
+	
 if __name__ == "__main__":
 	main()
