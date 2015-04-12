@@ -7,24 +7,26 @@
 
 #also presents a progress line when copying files
 
-import sys, os
+import os
 from datetime import datetime
 from os.path import join, splitext, split, exists
 from shutil import copyfile
-from filecmp import cmp
-import unicodedata
+import win32api
 
-rootOfEvil="c:\users\Anton\\"
-
+drives = win32api.GetLogicalDriveStrings()
 def main():
 	flag=0
 	control=""
-	print "Enter Destination Drive"
+	print "Enter User Name (As Defined In Windows):"
+	user = raw_input(">>")
+	rootOfEvil="c:\users\\"+user+"\\"
+	print "Enter Destination Drive,\nAvailable Drives: " + str(getDrives())
 	while flag!=1:
 		drive=raw_input("Drive>>")
 		if (len(drive)==1):
-			dest = drive + ":\BACKUP\\"
-			flag=1;
+			if (drive in getDrives()) or (drive.upper() in getDrives()):
+				dest = drive + ":\BACKUP\\"
+				flag=1;
 		else:
 			print "Enter only drive letter, no : or \\"
 			flag=0
@@ -54,6 +56,13 @@ def main():
 		elif (myInput=="5"):
 			control="exit"
 
+def getDrives():
+	drives=[]
+	for drive in win32api.GetLogicalDriveStrings().split("\x00"):
+		if drive!="":
+			drives.append(drive[0])
+	return drives
+			
 def go(src,destinationRoot,what):
 	count=0
 	total=0
@@ -84,11 +93,8 @@ def copy_directory(source, target,total):
 					count+=1
 					printIteration(count,total)
 				except Exception as e:
-<<<<<<< HEAD:ver1.py
 					print "error" + str(e)
-=======
 					print "\nError - Probably encoding issue, Exception:" + str(e)
->>>>>>> fdf45eb1053371afbcc664e319f923bdfc484ee0:backuper.py
 					error+=1
 					count+=1
 					printIteration(count,total)
